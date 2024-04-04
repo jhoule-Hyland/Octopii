@@ -25,6 +25,7 @@ SOFTWARE.
 """
 
 output_file = "output.json"
+piiCatch = "piiCatch"
 notifyURL = ""
 
 import json, textract, sys, urllib, cv2, os, json, shutil, traceback
@@ -108,6 +109,9 @@ def search_pii(file_path):
         "addresses" : addresses
     }
 
+    # MSD-534
+    file_utils.move_file(file_path, file_utils.destination)
+
     return result
     
 
@@ -116,8 +120,9 @@ if __name__ in '__main__':
         print_logo()
         help_screen()
         exit(-1)
-    else:
+    else: # MSD-534
         location = sys.argv[1]
+        catch_location = sys.argv[2]
 
         # Check for the -notify flag
         notify_index = sys.argv.index('--notify') if '--notify' in sys.argv else -1
@@ -202,10 +207,10 @@ if __name__ in '__main__':
         try:
             results = search_pii (file_path)
             print(json.dumps(results, indent=4))
-            file_utils.append_to_output_file(results, output_file)
+            print("Sanity Check init: piiCatch: " + piiCatch)
+            file_utils.append_to_output_file(results, output_file, piiCatch)
             if notifyURL != None: webhook.push_data(json.dumps(results), notifyURL)
             print ("\nOutput saved in " + output_file)
-
         except textract.exceptions.MissingFileError: print ("\nCouldn't find file '" + file_path + "', skipping...")
         
         except textract.exceptions.ShellError: print ("\nFile '" + file_path + "' is empty or corrupt, skipping...")

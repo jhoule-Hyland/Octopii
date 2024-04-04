@@ -1,0 +1,5 @@
+Case: 01234567
+Subject: Call our office
+Description: Call our office at 312-555-1234, or send an email to support@contoso.com
+Resolution: <p>Test ticket </p>
+Community Link: https://community.hyland.com/customer-portal/0/support-cases/01234567

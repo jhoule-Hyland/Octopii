@@ -23,8 +23,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-
-import requests, xmltodict, json, requests, cv2, urllib, http, traceback, os, textract, webhook, octopii
+# MSD-534
+import requests, xmltodict, json, requests, cv2, urllib, http, traceback, os, textract, webhook, octopii, shutil
 from skimage import io
 import numpy as np
 from urllib.request import Request, urlopen, re
@@ -131,8 +131,9 @@ def is_image(file_path):
     except:
         return False
 
-def append_to_output_file(data, file_name):
+def append_to_output_file(data, file_name, piiCatch):
     try:
+        print("Sanity Check: data pass: piiCatch: " + piiCatch)
         loaded_json = []
         try: 
             with open(file_name, 'r+') as read_file:    
@@ -146,3 +147,16 @@ def append_to_output_file(data, file_name):
     except:
         traceback.print_exc()
         print ("Couldn't write to "+ file_name +". Please check if the path is correct and try again.")
+
+# MSD-534
+def move_file(source, destination):
+    try:
+        # Move the file
+        shutil.move(source, destination)
+        print(f"File moved from {source} to {destination} successfully!")
+    except Exception as e:
+        print(f"Error: {e}")
+
+#def 
+
+
